@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Підсумкова робота: ШІ та Системи</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+            --text-main: #1d1d1f;
+            --text-sec: #515154;
+            --accent: #007aff;
+            --accent-hover: #0066d6;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            background-color: #f2f2f7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .bg-shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: drift 15s infinite alternate ease-in-out;
+        }
+        .shape1 { width: 400px; height: 400px; background: rgba(0, 122, 255, 0.3); top: -100px; left: -100px; }
+        .shape2 { width: 500px; height: 500px; background: rgba(52, 199, 89, 0.25); bottom: -150px; right: -100px; animation-delay: -5s; }
+        .shape3 { width: 350px; height: 350px; background: rgba(175, 82, 222, 0.2); top: 40%; left: 30%; animation-delay: -10s; }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -40px) scale(1.1); }
+        }
+
+        .container { max-width: 800px; width: 100%; z-index: 1; }
+
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px 40px;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .liquid-glass::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0));
+        }
+
+        .mt-3 { margin-top: 15px; } .mt-4 { margin-top: 25px; }
+        h1, h2 { text-align: center; margin-top: 0; font-weight: 600; letter-spacing: -0.5px; }
+        .subtitle { text-align: center; color: var(--text-sec); font-size: 16px; }
+
+        .info-badge {
+            background: rgba(255,255,255,0.5); color: var(--text-main);
+            padding: 8px 16px; border-radius: 20px; font-size: 14px;
+            font-weight: 500; width: max-content; margin: 15px auto;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 15px; }
+
+        input[type="text"], textarea {
+            width: 100%; padding: 14px 18px; border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            font-family: inherit; font-size: 16px; color: var(--text-main);
+            box-sizing: border-box; transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none; background: rgba(255, 255, 255, 0.7);
+            border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+        }
+
+        textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+
+        .instructions {
+            background: rgba(255, 204, 0, 0.15); border-left: 4px solid #ffcc00;
+            padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 25px;
+        }
+
+        .question-block { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .question-block:last-child { border-bottom: none; }
+        .question-text { font-weight: 600; margin-bottom: 12px; font-size: 17px; line-height: 1.4; }
+
+        .option {
+            display: flex; align-items: center; margin-bottom: 10px;
+            padding: 10px 14px; border-radius: 12px;
+            background: rgba(255, 255, 255, 0.3); cursor: pointer;
+            transition: background 0.2s; font-size: 15px;
+        }
+        .option:hover { background: rgba(255, 255, 255, 0.6); }
+        .option input { margin-right: 12px; transform: scale(1.3); accent-color: var(--accent); }
+
+        .ios-btn {
+            display: block; width: 100%; padding: 16px; border: none;
+            border-radius: 16px; font-size: 17px; font-weight: 600;
+            cursor: pointer; transition: transform 0.1s, background 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        .ios-btn:active { transform: scale(0.97); }
+        .btn-primary, #intro-screen .ios-btn { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3); }
+        .btn-primary:hover, #intro-screen .ios-btn:hover { background: var(--accent-hover); }
+        .btn-download { background: #34c759; color: white; box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3); }
+        .btn-download:hover { background: #28a745; }
+        .ios-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        #results { text-align: center; }
+        .success-icon { font-size: 64px; margin-bottom: -10px; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .score-card {
+            background: rgba(255,255,255,0.4); border-radius: 20px;
+            padding: 20px; margin: 20px auto; max-width: 250px; border: 1px solid rgba(255,255,255,0.5);
+        }
+        .score-display { font-size: 56px; font-weight: 700; color: var(--accent); line-height: 1; }
+        .result-name-text { font-size: 18px; font-weight: 500; }
+        .case-note { color: var(--text-sec); font-size: 14px; }
+
+        .animate-up { animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(30px); }
+        .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
+
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+
+        .timer-widget {
+            position: fixed; top: 20px; right: 20px; padding: 12px 24px;
+            border-radius: 30px; font-size: 20px; font-weight: 700;
+            color: var(--accent); z-index: 100; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 8px;
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .timer-warning {
+            color: #ff3b30; border-color: rgba(255, 59, 48, 0.4);
+            background: rgba(255, 59, 48, 0.1); animation: pulse 1s infinite;
+        }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+
+    <div id="timer-widget" class="liquid-glass timer-widget" style="display: none;">
+        ⏱ <span id="time-display">40:00</span>
+    </div>
+
+    <div class="container">
+        <div class="liquid-glass animate-up" id="intro-screen">
+            <h1>Підсумкова робота з інформатики</h1>
+            <p class="subtitle">9 клас. Тема: «Еволюція та основи штучного інтелекту»</p>
+            <div class="info-badge">Час: 40 хвилин | Максимум: 12 балів</div>
+            
+            <div class="form-group mt-4">
+                <label for="student-name">Прізвище та Ім'я:</label>
+                <input type="text" id="student-name" placeholder="Введіть ваше прізвище та ім'я" required autocomplete="off">
+            </div>
+            
+            <button class="ios-btn mt-3" onclick="startTest()">Почати роботу</button>
+        </div>
+
+        <div id="test-content" style="display: none;">
+            <div class="liquid-glass animate-up delay-1">
+                <h2>📝 ЧАСТИНА 1. Тест</h2>
+                <div class="instructions">Деякі питання мають декілька правильних варіантів відповідей (квадратні чекбокси).</div>
+                <div id="questions-container"></div>
+            </div>
+
+            <div class="liquid-glass animate-up delay-2 mt-4">
+                <h2>📋 ЧАСТИНА 2. Практичний кейс</h2>
+                <p class="case-legend"><b>Легенда:</b> Школі потрібно створити автоматизовану систему для кабінету біології, яка підтримуватиме оптимальну температуру та освітленість для рослин. Спроєктуй концепт.</p>
+                
+                <div class="form-group">
+                    <label><b>Блок 1. Мікроконтролер</b> (Arduino, ESP32 або Raspberry Pi). Обґрунтуй вибір:</label>
+                    <textarea id="case-block-1" placeholder="Ваша відповідь..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label><b>Блок 2. Сенсори та актуатори.</b> Вкажи мінімум 2 датчики та виконавчі пристрої:</label>
+                    <textarea id="case-block-2" placeholder="Ваша відповідь..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label><b>Блок 3. Замкнений контур.</b> Опиши ланцюжок: Вимірювання → Аналіз → Дія → Зворотний зв'язок:</label>
+                    <textarea id="case-block-3" placeholder="Ваша відповідь..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label><b>Блок 4. Етапи прототипування.</b> 4 покрокові етапи створення:</label>
+                    <textarea id="case-block-4" placeholder="Ваша відповідь..."></textarea>
+                </div>
+            </div>
+
+            <div class="action-bar animate-up delay-3 mt-4">
+                <button id="submit-btn" class="ios-btn btn-primary" onclick="submitWork()">Завершити та відправити</button>
+            </div>
+        </div>
+
+        <div class="liquid-glass animate-up" id="results" style="display: none;">
+            <div class="success-icon">✨</div>
+            <h2>Роботу успішно відправлено!</h2>
+            <p id="result-name" class="result-name-text"></p>
+            <div class="score-card">
+                <p>Бал за тест</p>
+                <div class="score-display" id="score-display">0 / 8</div>
+            </div>
+            <p class="case-note">Ваші відповіді збережені та надіслані вчителю на перевірку.</p>
+            <button class="ios-btn btn-download mt-4" onclick="downloadReport()">Завантажити копію собі</button>
+        </div>
+    </div>
+
+    <script>
+        // ТУТ ВСТАВТЕ ВАШ КЛЮЧ (Отримайте безкоштовно на web3forms.com)
+        const WEB3FORMS_ACCESS_KEY = "c8cd5cef-d25a-4b3e-8961-47e7ef0b7f71"; 
+        const TEST_TIME_MINUTES = 40; 
+
+        const testData = [
+            { q: "1. Яка основна функція системи моніторингу?", options: ["Автоматична зміна фізичних параметрів", "Спостереження та передавання даних на сервер", "Створення вихідного коду для контролерів", "Ручне керування електроприладами в будинку"], correct: [1], type: "radio" },
+            { q: "2. Чим система керування із замкненим контуром відрізняється від системи з відкритим контуром?", options: ["У замкненому контурі відсутні датчики", "Замкнений контур використовує вихідні дані як зворотний зв'язок", "Система з відкритим контуром призначена для автоматичного досягнення заданих умов", "Система з відкритим контуром порівнює фактичне значення з бажаним"], correct: [1], type: "radio" },
+            { q: "3. Які пристрої належать до виконавчих механізмів (актуаторів)? (Оберіть декілька)", options: ["Обігрівач", "Датчик температури", "Компресор кондиціонера", "Датчик освітленості", "Привід вимикача"], correct: [0, 2, 4], type: "checkbox" },
+            { q: "4. Яка з систем працює за принципом відкритого контуру?", options: ["Система кондиціонування повітря з датчиком температури", "Процес прання у пральній машині (Брудний одяг -> Пральна машина -> Чистий одяг)", "Система автоматичного обігріву приміщення", "Автоматична система контролю вологості ґрунту"], correct: [1], type: "radio" },
+            { q: "5. Який датчик визначає присутність об'єктів без фізичного контакту (наприклад, парктронік)?", options: ["Датчик тиску", "Датчик наближення", "Сенсорний датчик дотику", "Датчик диму"], correct: [1], type: "radio" },
+            { q: "6. Який мікроконтролер має вбудований Wi-Fi та найчастіше використовується для IoT?", options: ["Arduino", "ESP32", "Shakey", "Deep Blue"], correct: [1], type: "radio" },
+            { q: "7. Які ключові переваги має відкрита архітектура електронних систем? (Оберіть декілька)", options: ["Наявність універсальних портів вводу/виводу", "Докладна технічна документація", "Можливість роботи виключно з «рідними» деталями", "Формування відкритої спільноти розробників", "Повна заборона модифікації ПЗ"], correct: [0, 1, 3], type: "checkbox" },
+            { q: "8. Що таке API?", options: ["Фізичний порт на платі", "Набір правил і команд для взаємодії програм", "Перша спрощена версія майбутнього виробу", "Програма для захисту персональних даних"], correct: [1], type: "radio" },
+            { q: "9. Який етап є найпершим у процесі створення нового пристрою?", options: ["Формування ідеї", "Побудова первинної версії", "Налагодження", "Планування структури"], correct: [0], type: "radio" },
+            { q: "10. Властивість різних систем обмінюватися інформацією та використовувати її разом називається:", options: ["Пропрієтарність", "Модифікація", "Інтероперабельність", "Глибоке навчання"], correct: [2], type: "radio" },
+            { q: "11. Як розшифровується абревіатура «Дрон»?", options: ["Дистанційний комп'ютерний модуль", "Динамічне дистанційно кероване навігаційне обладнання", "Автоматичний підводний апарат", "Автономний робот-пилосос"], correct: [1], type: "radio" },
+            { q: "12. Яка характеристика відповідає Рівню 5 (Повна автоматизація) за класифікацією SAE?", options: ["Водій повинен постійно стежити за смугою", "Система лише допомагає під час паркування", "Автомобіль працює повністю автономно", "Водій має бути готовий взяти керування за секунди"], correct: [2], type: "radio" },
+            { q: "13. Які виклики виникають під час упровадження автономних автомобілів? (Оберіть декілька)", options: ["Потреба в передових датчиках", "Відсутність чітких юридичних правил", "Відсутність технологій супутникової навігації", "Необхідність формування довіри суспільства"], correct: [0, 1, 3], type: "checkbox" },
+            { q: "14. Яку інформацію використовує система автоматичного гальмування?", options: ["Дані лише від датчиків тиску", "Дані від лазерів, радарів, камер та GPS", "Показники датчика температури", "Сигнали від механічних кнопок"], correct: [1], type: "radio" },
+            { q: "15. У яких сферах застосовуються дрони згідно з матеріалами підручника? (Оберіть декілька)", options: ["Цивільна", "Наукова", "Комерційна", "Військова"], correct: [0, 1, 2, 3], type: "checkbox" },
+            { q: "16. Яка подія 1956 року вважається місцем народження штучного інтелекту?", options: ["Створення програми ELIZA", "Дартмутська конференція", "Перемога Deep Blue", "Створення бота Shakey"], correct: [1], type: "radio" },
+            { q: "17. Чим машинне навчання відрізняється від традиційного програмування?", options: ["Працює без даних", "Навчання комп'ютера на основі даних для прогнозування", "Вимагає самоперенавчання традиційним кодом", "Не застосовується для розпізнавання тексту"], correct: [1], type: "radio" },
+            { q: "18. Яке співвідношення галузей є правильним (від найширшої до найвужчої)?", options: ["Штучний інтелект -> Машинне навчання -> Глибоке навчання", "Глибоке навчання -> Машинне навчання -> Штучний інтелект", "Комп'ютерний зір -> Штучний інтелект -> Машинне навчання", "Правила ведення бізнесу -> Глибоке навчання -> Штучний інтелект"], correct: [0], type: "radio" },
+            { q: "19. Що таке «дипфейк» (deepfake)?", options: ["Метод виправлення помилок у коді", "Реалістичне відео/фото, створене штучно за допомогою ШІ", "Датчик виявлення диму", "Спеціальний алгоритм захисту паролів"], correct: [1], type: "radio" },
+            { q: "20. Які етичні ризики пов'язані з розвитком ШІ? (Оберіть декілька)", options: ["Порушення приватності", "Алгоритмічна упередженість", "Складність визначення відповідальності", "Занепокоєння щодо втрати робочих місць"], correct: [0, 1, 2, 3], type: "checkbox" },
+            { q: "21. Як працюють моделі генерації зображень (Midjourney, DALL-E тощо)?", options: ["Шукають і копіюють картини з інтернету", "Використовуючи математичні обчислення та аналіз даних", "Мають людську свідомість", "Сканують малюнки через веб-камеру"], correct: [1], type: "radio" },
+            { q: "22. З яких трьох основних шарів складається нейронна мережа?", options: ["Вхідний, Проміжний, Резервний", "Вхідний, Приховані, Вихідний", "Первинний, Алгоритмічний, Підсумковий", "Датчиків, Процесора, Екрана"], correct: [1], type: "radio" },
+            { q: "23. Що таке Зоровий комп'ютерний синдром (ЗКС)?", options: ["Поломка монітора", "Стан втоми очей та головного болю через екрани", "Запалення суглобів кісті", "Порушення постави"], correct: [1], type: "radio" },
+            { q: "24. У чому полягає правило «20-20-20»?", options: ["Вимкнення комп'ютера", "Кожні 20 хв робити 20-секундний відпочинок, дивлячись на 6 метрів вдалечінь", "Працювати 20 годин", "Зменшувати яскравість на 20%"], correct: [1], type: "radio" },
+            { q: "25. Яких правил ергономіки слід дотримуватися? (Оберіть декілька)", options: ["Стілець підтримує спину, ступні на підлозі", "Монітор трохи нижче рівня очей", "Смартфон на рівні живота", "Смартфон піднімати високо, щоб голова не хилилася"], correct: [0, 1, 3], type: "checkbox" }
+        ];
+
+        let reportData = "";
+        let timeRemaining = TEST_TIME_MINUTES * 60;
+        let timerInterval;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById('questions-container');
+            testData.forEach((item, index) => {
+                let optionsHTML = '';
+                item.options.forEach((opt, optIndex) => {
+                    optionsHTML += `<label class="option"><input type="${item.type}" name="q${index}" value="${optIndex}"> ${opt}</label>`;
+                });
+                container.innerHTML += `<div class="question-block"><div class="question-text">${item.q}</div>${optionsHTML}</div>`;
+            });
+        });
+
+        function startTest() {
+            const nameInput = document.getElementById('student-name');
+            if (!nameInput.value.trim()) {
+                nameInput.focus();
+                alert("Будь ласка, введіть своє прізвище та ім'я.");
+                return;
+            }
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('test-content').style.display = 'block';
+            document.getElementById('timer-widget').style.display = 'flex';
+            timerInterval = setInterval(updateTimer, 1000);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateTimer() {
+            timeRemaining--;
+            const m = Math.floor(timeRemaining / 60);
+            const s = timeRemaining % 60;
+            document.getElementById('time-display').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            if (timeRemaining <= 180) document.getElementById('timer-widget').classList.add('timer-warning');
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                alert("Час вичерпано! Ваша робота відправляється автоматично.");
+                submitWork(true);
+            }
+        }
+
+        async function submitWork(isAutoSubmit = false) {
+            if (!isAutoSubmit && !confirm("Ви впевнені, що хочете завершити роботу?")) return;
+
+            clearInterval(timerInterval);
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Відправлення результатів... ⏳";
+
+            const studentName = document.getElementById('student-name').value.trim();
+            let rawScore = 0; let testReport = "";
+
+            testData.forEach((item, index) => {
+                const inputs = document.querySelectorAll(`input[name="q${index}"]:checked`);
+                const selected = Array.from(inputs).map(inp => parseInt(inp.value));
+                let isCorrect = selected.length === item.correct.length && selected.every(val => item.correct.includes(val));
+                if(isCorrect) rawScore++;
+                testReport += `${item.q}\nВідповідь: ${isCorrect ? '✅ Правильно' : '❌ Неправильно'}\n\n`;
+            });
+
+            const scaledScore = ((rawScore / 25) * 8).toFixed(1);
+            const case1 = document.getElementById('case-block-1').value || "-";
+            const case2 = document.getElementById('case-block-2').value || "-";
+            const case3 = document.getElementById('case-block-3').value || "-";
+            const case4 = document.getElementById('case-block-4').value || "-";
+
+            reportData = `ПІДСУМКОВА РОБОТА | Учень: ${studentName}\nЧас здачі: ${new Date().toLocaleString()}\n`;
+            reportData += `Бал за тест: ${scaledScore} з 8.0\n------------------------------------\n`;
+            reportData += `КЕЙС 1 (Плата): ${case1}\n\nКЕЙС 2 (Сенсори): ${case2}\n\nКЕЙС 3 (Алгоритм): ${case3}\n\nКЕЙС 4 (Етапи): ${case4}\n`;
+            reportData += `------------------------------------\nДЕТАЛІ ТЕСТУ:\n${testReport}`;
+
+            if (WEB3FORMS_ACCESS_KEY !== "ВАШ_КЛЮЧ_ТУТ") {
+                try {
+                    await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify({
+                            access_key: WEB3FORMS_ACCESS_KEY,
+                            subject: `Інформатика: ${studentName} - Оцінка: ${scaledScore}`,
+                            from_name: "Підсумкова Робота",
+                            message: reportData,
+                        })
+                    });
+                } catch (e) {
+                    alert("Проблема з сервером. Але ви можете завантажити файл.");
+                }
+            }
+
+            document.getElementById('timer-widget').style.display = 'none';
+            document.getElementById('test-content').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('result-name').innerHTML = `<b>${studentName}</b>`;
+            document.getElementById('score-display').innerText = `${scaledScore}`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function downloadReport() {
+            const sn = document.getElementById('student-name').value.trim();
+            const blob = new Blob([reportData], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Підсумкова_${sn.replace(/\s+/g, '_')}.txt`;
+            a.click();
+        }
+    </script>
+</body>
+</html>
